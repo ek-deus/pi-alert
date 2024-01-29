@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  pi.alert:
+     container_name: Pi.Alert
+     healthcheck:
+      test: curl -f http://localhost:17811/ || exit 1
+     mem_limit: 2g
+     cpu_shares: 768
+     security_opt:
+      - no-new-privileges:true
+     volumes:
+      - /volume1/docker/pialert/config:/home/pi/pialert/config:rw
+      - /volume1/docker/pialert/db:/home/pi/pialert/db:rw
+      - /volume1/docker/pialert/logs:/home/pi/pialert/front/log:rw
+     environment:
+      TZ: Europe/Bucharest
+      PORT: 17811
+      HOST_USER_ID: 1026
+      HOST_USER_GID: 100
+     network_mode: host
+     restart: on-failure:5
+     image: jokobsk/pi.alert:latest
